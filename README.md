@@ -99,7 +99,7 @@ To run the test suite:
 
 ## Contributing
 
-1. Fork it ( http://github.com/<my-github-username>/webdack-uuid_migration/fork )
+1. Fork it ( http://github.com/kreatio-sw/webdack-uuid_migration/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
