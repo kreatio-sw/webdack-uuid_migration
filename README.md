@@ -89,7 +89,7 @@ Example:
 
 ## Compatibility
 
-Works only with Rails 4. It uses Rails4's out-of-the-box UUID support for PostgreSQL. Works with Ruby 1.9.3 an 2.0.0.
+Works only with Rails 4. It uses Rails4's out-of-the-box UUID support for PostgreSQL. Works with Ruby 1.9.3 and 2.0.0.
 
 To run the test suite:
 
