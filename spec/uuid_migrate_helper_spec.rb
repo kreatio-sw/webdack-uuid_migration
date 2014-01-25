@@ -89,7 +89,7 @@ describe Webdack::UUIDMigration::Helpers do
 
   def key_relationships
     [
-        Student.order(:name).map { |s| [s.name, s.city.name, s.institution.name] },
+        Student.order(:name).map { |s| [s.name, s.city ? s.city.name : nil, s.institution ? s.institution.name : nil] },
         City.order(:name).map { |c| [c.name, c.students.order(:name).map(&:name)] },
         School.order(:name).map { |s| [s.name, s.students.order(:name).map(&:name)] },
         College.order(:name).map { |c| [c.name, c.students.order(:name).map(&:name)] }
@@ -145,6 +145,17 @@ describe Webdack::UUIDMigration::Helpers do
   end
 
   it 'should migrate entire database in one go' do
+    expect {
+      MigrateAllOneGo.migrate(:up)
+      reset_columns_data
+    }.to_not change {
+      key_relationships
+    }
+  end
+
+  it 'should handle nulls' do
+    Student.create(name: 'Student without city or institution')
+
     expect {
       MigrateAllOneGo.migrate(:up)
       reset_columns_data
