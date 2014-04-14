@@ -19,14 +19,14 @@ Or install it yourself as:
 
 ## Usage
 
-- Put `require 'webdack/uuid_migration/helper'` in your migration file.
+- Put `require 'webdack/uuid_migration/helpers'` in your migration file.
 - Enable `'uuid-ossp'` directly in Postgres database or by adding `enable_extension 'uuid-ossp'` to your migration.
 - Use methods from {Webdack::UUIDMigration::Helpers} as appropriate.
 
 Example:
 
     # You must explicitly require it in your migration file
-    require 'webdack/uuid_migration/helper'
+    require 'webdack/uuid_migration/helpers'
 
     class UuidMigration < ActiveRecord::Migration
       def change
