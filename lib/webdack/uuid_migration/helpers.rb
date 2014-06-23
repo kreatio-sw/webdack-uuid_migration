@@ -21,7 +21,7 @@ module Webdack
                  ALTER COLUMN #{column} SET DATA TYPE UUID USING (#{to_uuid_pg(column)}),
                  ALTER COLUMN #{column} SET DEFAULT #{default}}
 
-        execute %Q{DROP SEQUENCE #{table}_#{column}_seq} rescue nil
+        execute %Q{DROP SEQUENCE IF EXISTS #{table}_#{column}_seq} rescue nil
       end
 
       # Converts a column to UUID, migrates all data by left padding with 0's
