@@ -13,7 +13,7 @@ def init_database
 # drops and create need to be performed with a connection to the 'postgres' (system) database
   ActiveRecord::Base.establish_connection(PG_SPEC.merge('database' => 'postgres', 'schema_search_path' => 'public'))
 # drop the old database (if it exists)
-  ActiveRecord::Base.connection.drop_database PG_SPEC[:database] rescue nil
+  ActiveRecord::Base.connection.drop_database PG_SPEC[:database]
 # create new
   ActiveRecord::Base.connection.create_database(PG_SPEC[:database])
   ActiveRecord::Base.establish_connection(PG_SPEC)
