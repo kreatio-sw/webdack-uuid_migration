@@ -16,6 +16,10 @@ And then execute:
 Or install it yourself as:
 
     $ gem install webdack-uuid_migration
+    
+This gem is needed only during database migrations. 
+Once the database has been migrated in all environments, 
+this gem can safely be removed from your applications Gemfile.
 
 ## Usage
 
