@@ -80,11 +80,18 @@ describe Webdack::UUIDMigration::Helpers do
   def initial_setup
     init_database
     create_initial_schema
+    reset_columns_data
     populate_sample_data
+  end
+
+  def reload_models
+    [:Student, :City, :School, :College].each {|klass| Object.send(:remove_const, klass)}
+    Dir["#{File.dirname(__FILE__)}/support/models/*.rb"].each { |f| load f }
   end
 
   def reset_columns_data
     [City, College, School, Student].each{|klass| klass.reset_column_information}
+    reload_models
   end
 
   def key_relationships
@@ -124,7 +131,7 @@ describe Webdack::UUIDMigration::Helpers do
       # Verify that our data is still there
       student= Student.where(name: original_name).first
 
-      # Verify that data in id columns have been migrated to UUID by verifying teh format
+      # Verify that data in id columns have been migrated to UUID by verifying the format
       [student.id, student.city_id, student.institution_id].each do |id|
         expect(id).to match(/^0{8}-0{4}-0{4}-0{4}-\d{12}$/)
       end
