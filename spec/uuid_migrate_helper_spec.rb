@@ -80,7 +80,7 @@ describe Webdack::UUIDMigration::Helpers do
   def initial_setup
     init_database
     create_initial_schema
-    reset_columns_data
+    reset_columns_data      # Ensure to reset the column data before sample data creation.
     populate_sample_data
   end
 
