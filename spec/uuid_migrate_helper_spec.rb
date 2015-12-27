@@ -84,8 +84,14 @@ describe Webdack::UUIDMigration::Helpers do
     populate_sample_data
   end
 
+  def reload_models
+    [:Student, :City, :School, :College].each {|klass| Object.send(:remove_const, klass)}
+    Dir["#{File.dirname(__FILE__)}/support/models/*.rb"].each { |f| load f }
+  end
+
   def reset_columns_data
     [City, College, School, Student].each{|klass| klass.reset_column_information}
+    reload_models
   end
 
   def key_relationships
