@@ -9,3 +9,7 @@ rvm:
   - ruby-head
 
 script: bundle exec rspec spec
+
+matrix:
+  allow_failures:
+    - rvm: jruby
