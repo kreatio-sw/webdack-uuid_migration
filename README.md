@@ -1,5 +1,7 @@
 # Webdack::UuidMigration
 
+[![Build Status](https://travis-ci.org/kreatio-sw/webdack-uuid_migration.svg?branch=master)](https://travis-ci.org/kreatio-sw/webdack-uuid_migration)
+
 Helper methods to migrate Integer columns to UUID columns during migrations in PostgreSQL.
 It supports migrating primary key columns as well.
 
