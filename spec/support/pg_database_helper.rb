@@ -2,11 +2,9 @@
 
 PG_SPEC = {
     :adapter  => 'postgresql',
-    :host     => 'localhost',
     :database => 'webdack_uuid_migration_helper_test',
-    :username => 'kdeepak',
-    :encoding => 'utf8',
-    :password => 'kreatio'
+    :username => 'postgres',
+    :encoding => 'utf8'
 }
 
 def init_database
