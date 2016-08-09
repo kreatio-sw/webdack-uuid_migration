@@ -3,4 +3,3 @@ rvm:
 
 script: bundle exec rspec spec
 
-matrix:
