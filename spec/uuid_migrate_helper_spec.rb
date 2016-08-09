@@ -38,6 +38,22 @@ class MigrateAllOneGo < ActiveRecord::Migration
   end
 end
 
+class MigrateWithFk < ActiveRecord::Migration
+  def change
+    reversible do |dir|
+      dir.up do
+        enable_extension 'uuid-ossp'
+
+        primary_key_and_all_references_to_uuid :cities
+      end
+
+      dir.down do
+        raise ActiveRecord::IrreversibleMigration
+      end
+    end
+  end
+end
+
 class MigrateStep01 < ActiveRecord::Migration
   def change
     reversible do |dir|
@@ -148,6 +164,21 @@ describe Webdack::UUIDMigration::Helpers do
   it 'should migrate entire database in one go' do
     expect {
       MigrateAllOneGo.migrate(:up)
+      reset_columns_data
+    }.to_not change {
+      key_relationships
+    }
+  end
+
+  it 'should migrate a primary key and all columns referencing it using foreign keys' do
+    # Create 2 more tables similar to the way new version of Rails will do
+    create_tables_with_fk
+
+    # Add Foreign key for this reference as well
+    ActiveRecord::Base.connection.add_foreign_key :students, :cities
+
+    expect {
+      MigrateWithFk.migrate(:up)
       reset_columns_data
     }.to_not change {
       key_relationships

@@ -62,6 +62,39 @@ retrieve old id in future.
 See {Webdack::UUIDMigration::Helpers} for more details. {Webdack::UUIDMigration::Helpers} is mixed
 into {ActiveRecord::Migration}, so that all methods can directly be used within migrations.
 
+### Schema with Foreign Key References
+
+Please see [https://github.com/kreatio-sw/webdack-uuid_migration/issues/4]
+
+To update a primary key and all columns referencing it please use
+{Webdack::UUIDMigration::Helpers#primary_key_and_all_references_to_uuid}. For example:
+
+```
+class MigrateWithFk < ActiveRecord::Migration
+  def change
+    reversible do |dir|
+      dir.up do
+        enable_extension 'uuid-ossp'
+
+        primary_key_and_all_references_to_uuid :cities
+      end
+
+      dir.down do
+        raise ActiveRecord::IrreversibleMigration
+      end
+    end
+  end
+end
+```
+
+Internally it will query the database to find all tables & columns referring to this primary key as foreign keys
+and do the following:
+
+- Drop all foreign key constraints referring to this primary key
+- Convert the primary key to UUID
+- Convert all referring columns to UUID
+- Restore all foreign keys
+
 ### Polymorphic references
 
 Migrating Polymorphic references may get tricky if not all the participating entities are getting migrated to
@@ -95,10 +128,10 @@ Example:
 
 ## Compatibility
 
-Works only with Rails 4. It uses Rails4's out-of-the-box UUID support for PostgreSQL. Works with Ruby 1.9.3,
+Works only with Rails 4 & Rails 5. It uses Rails4's out-of-the-box UUID support for PostgreSQL. Works with Ruby 1.9.3,
  2.0.0, 2.1.1, and 2.3.0.
  
-Tested with Rails 5.0.0.beta1.
+Tested with Rails 5.0.0.
 
 To run the test suite:
 

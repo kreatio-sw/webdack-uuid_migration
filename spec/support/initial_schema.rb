@@ -38,3 +38,17 @@ def create_initial_schema
 
   end
 end
+
+def create_tables_with_fk
+  connection = ActiveRecord::Base.connection
+
+  connection.create_table "dummy01", force: true do |t|
+    t.string "name"
+    t.references "city", index: true, foreign_key: {on_update: :cascade, on_delete: :nullify}
+  end
+
+  connection.create_table "dummy02", force: true do |t|
+    t.string "name"
+    t.references "city", index: true, foreign_key: {on_update: :restrict, on_delete: :restrict}
+  end
+end

@@ -1,6 +1,10 @@
+require_relative 'schema_helpers'
+
 module Webdack
   module UUIDMigration
     module Helpers
+      include SchemaHelpers
+
 
       # Converts primary key from Serial Integer to UUID, migrates all data by left padding with 0's
       #   sets uuid_generate_v4() as default for the column
@@ -70,6 +74,32 @@ module Webdack
                   UPDATE #{table} SET #{column}_id= #{to_uuid_pg("#{column}_id")}
                     WHERE #{column}_type in (#{list_of_entities})
                 }
+      end
+
+      # Convert primary key of a table and all referring columns to UUID. Useful if migrations were generated
+      # with newer version of Rails that automatically creates foreign key constraints in the database.
+      #
+      # Internally it will query the database to find all tables & columns referring to this primary key as foreign keys
+      # and do the following:
+      #
+      # - Drop all foreign key constraints referring to this primary key
+      # - Convert the primary key to UUID
+      # - Convert all referring columns to UUID
+      # - Restore all foreign keys
+      #
+      # @param table[Symbol]
+      def primary_key_and_all_references_to_uuid(table)
+        fk_specs = foreign_keys_into(:cities)
+
+        drop_foreign_keys(fk_specs)
+
+        primary_key_to_uuid(table)
+
+        fk_specs.each do |fk_spec|
+          columns_to_uuid fk_spec[:from_table], fk_spec[:column]
+        end
+
+        create_foreign_keys(fk_specs.deep_dup)
       end
 
       private
