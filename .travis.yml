@@ -1,5 +1,15 @@
 rvm:
+  - 2.0.0
+  - 2.1.10
+  - 2.2.5
   - 2.3.1
+
+gemfile:
+  - gemfiles/rails42.gemfile
 
 script: bundle exec rspec spec
 
+matrix:
+  include:
+    - rvm: 2.3.1
+      gemfile: gemfiles/rails50.gemfile
