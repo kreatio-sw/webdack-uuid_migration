@@ -88,6 +88,7 @@ module Webdack
       # - Restore all foreign keys
       #
       # @param table[Symbol]
+      # @note Works only with Rails 4.2 or newer
       def primary_key_and_all_references_to_uuid(table)
         fk_specs = foreign_keys_into(:cities)
 

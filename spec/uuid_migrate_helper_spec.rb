@@ -170,7 +170,7 @@ describe Webdack::UUIDMigration::Helpers do
     }
   end
 
-  it 'should migrate a primary key and all columns referencing it using foreign keys' do
+  it 'should migrate a primary key and all columns referencing it using foreign keys', rails_4_2_or_newer: true do
     # Create 2 more tables similar to the way new version of Rails will do
     create_tables_with_fk
 

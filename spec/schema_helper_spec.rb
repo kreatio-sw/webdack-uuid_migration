@@ -4,7 +4,7 @@ ActiveRecord::ConnectionAdapters::AbstractAdapter.class_eval do
   include Webdack::UUIDMigration::SchemaHelpers
 end
 
-describe Webdack::UUIDMigration::SchemaHelpers do
+describe Webdack::UUIDMigration::SchemaHelpers, rails_4_2_or_newer: true do
   def initial_setup
     init_database
     create_initial_schema

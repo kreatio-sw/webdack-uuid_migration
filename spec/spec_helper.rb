@@ -6,3 +6,9 @@ require 'pg'
 require 'webdack/uuid_migration/helpers'
 
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
+
+RSpec.configure do |c|
+  if Gem::Version.new(ActiveRecord::VERSION::STRING) < Gem::Version.new('4.2')
+    c.filter_run_excluding rails_4_2_or_newer: true
+  end
+end

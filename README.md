@@ -66,6 +66,8 @@ into {ActiveRecord::Migration}, so that all methods can directly be used within 
 
 Please see [https://github.com/kreatio-sw/webdack-uuid_migration/issues/4]
 
+This function will only work with Rails 4.2 or newer.
+
 To update a primary key and all columns referencing it please use
 {Webdack::UUIDMigration::Helpers#primary_key_and_all_references_to_uuid}. For example:
 
