@@ -170,19 +170,21 @@ describe Webdack::UUIDMigration::Helpers do
     }
   end
 
-  it 'should migrate a primary key and all columns referencing it using foreign keys' do
-    # Create 2 more tables similar to the way new version of Rails will do
-    create_tables_with_fk
+  if Gem::Version.new(ActiveRecord::VERSION::STRING) > Gem::Version.new('4.2')
+    it 'should migrate a primary key and all columns referencing it using foreign keys' do
+      # Create 2 more tables similar to the way new version of Rails will do
+      create_tables_with_fk
 
-    # Add Foreign key for this reference as well
-    ActiveRecord::Base.connection.add_foreign_key :students, :cities
+      # Add Foreign key for this reference as well
+      ActiveRecord::Base.connection.add_foreign_key :students, :cities
 
-    expect {
-      MigrateWithFk.migrate(:up)
-      reset_columns_data
-    }.to_not change {
-      key_relationships
-    }
+      expect {
+        MigrateWithFk.migrate(:up)
+        reset_columns_data
+      }.to_not change {
+        key_relationships
+      }
+    end
   end
 
   it 'should handle nulls' do
