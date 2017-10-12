@@ -102,14 +102,6 @@ module Webdack
 
         create_foreign_keys(fk_specs.deep_dup)
       end
-      
-      def extract_foreign_key_action(specifier)
-        case specifier
-        when "c"; :cascade
-        when "n"; :nullify
-        when "r"; :restrict
-        end
-      end
 
       private
       # Prepare a fragment that can be used in SQL statements that converts teh data value
