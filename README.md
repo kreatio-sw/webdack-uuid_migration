@@ -2,6 +2,9 @@
 
 [![Build Status](https://travis-ci.org/kreatio-sw/webdack-uuid_migration.svg?branch=master)](https://travis-ci.org/kreatio-sw/webdack-uuid_migration)
 
+**This project is actively maintained. Please report issues and/or create
+pull requests if you face any issues.** 
+
 Helper methods to migrate Integer columns to UUID columns during migrations in PostgreSQL.
 It supports migrating primary key columns as well.
 
@@ -130,10 +133,16 @@ Example:
 
 ## Compatibility
 
-Works only with Rails 4 & Rails 5. It uses Rails4's out-of-the-box UUID support for PostgreSQL. Works with Ruby 1.9.3,
- 2.0.0, 2.1.1, and 2.3.0.
+Works only with Rails 4 & Rails 5. It uses Rails4's out-of-the-box UUID support for PostgreSQL. Works with following 
+Ruby versions:
+
+- 2.0.0
+- 2.1.10
+- 2.2.8
+- 2.3.5
+- 2.4.2
  
-Tested with Rails 5.0.0.
+Tested with Rails 5.0.x and 5.1.x. Reported working with 5.2.0 alpha.
 
 To run the test suite:
 
@@ -145,6 +154,7 @@ To run the test suite:
 
 - Users of the Gem
 - [Felix Bünemann](https://github.com/felixbuenemann) for checking compatibility with Rails 4.1
+- [Nick Schwaderer](https://github.com/Schwad) Rials 5.2.x compatibility
 
 ## Contributing
 
