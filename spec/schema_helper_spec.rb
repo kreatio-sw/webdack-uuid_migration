@@ -25,25 +25,25 @@ describe Webdack::UUIDMigration::SchemaHelpers, rails_4_2_or_newer: true do
   it 'should get all foreign keys into a table' do
     foreign_keys_into = @connection.foreign_keys_into(:cities)
 
+    # Remove column :name from the FK info
+    foreign_keys_into = foreign_keys_into.map { |i| i.delete(:name); i }
+
     expect(foreign_keys_into).to eq([{:to_table => "cities",
                                       :primary_key => "id",
                                       :from_table => "dummy01",
                                       :column => "city_id",
-                                      :name => "fk_rails_d0b87897d5",
                                       :on_delete => :nullify,
                                       :on_update => :cascade},
                                      {:to_table => "cities",
                                       :primary_key => "id",
                                       :from_table => "dummy02",
                                       :column => "city_id",
-                                      :name => "fk_rails_bc0a81611b",
                                       :on_delete => :restrict,
                                       :on_update => :restrict},
                                      {:to_table => "cities",
                                       :primary_key => "id",
                                       :from_table => "students",
                                       :column => "city_id",
-                                      :name => "fk_rails_c4b8171c0a",
                                       :on_delete => nil,
                                       :on_update => nil}])
   end
