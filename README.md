@@ -8,6 +8,10 @@ pull requests if you face any issues.**
 Helper methods to migrate Integer columns to UUID columns during migrations in PostgreSQL.
 It supports migrating primary key columns as well.
 
+## Documentation
+
+http://www.rubydoc.info/gems/webdack-uuid_migration
+
 ## Installation
 
 Add this line to your application's Gemfile:
