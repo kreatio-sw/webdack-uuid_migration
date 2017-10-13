@@ -33,6 +33,14 @@ module Webdack
           options
         end
       end
+      
+      def extract_foreign_key_action(specifier)
+        case specifier
+        when "c"; :cascade
+        when "n"; :nullify
+        when "r"; :restrict
+        end
+      end
 
       def drop_foreign_keys(foreign_keys)
         foreign_keys.each do |fk_key_spec|
