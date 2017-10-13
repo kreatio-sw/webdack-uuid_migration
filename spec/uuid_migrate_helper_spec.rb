@@ -1,6 +1,6 @@
 require_relative 'spec_helper'
 
-class BasicMigration < ActiveRecord::Migration
+class BasicMigration < ActiveRecordMigration
   def change
     reversible do |dir|
       dir.up do
@@ -17,7 +17,7 @@ class BasicMigration < ActiveRecord::Migration
   end
 end
 
-class MigrateAllOneGo < ActiveRecord::Migration
+class MigrateAllOneGo < ActiveRecordMigration
   def change
     reversible do |dir|
       dir.up do
@@ -38,7 +38,7 @@ class MigrateAllOneGo < ActiveRecord::Migration
   end
 end
 
-class MigrateWithFk < ActiveRecord::Migration
+class MigrateWithFk < ActiveRecordMigration
   def change
     reversible do |dir|
       dir.up do
@@ -54,7 +54,7 @@ class MigrateWithFk < ActiveRecord::Migration
   end
 end
 
-class MigrateStep01 < ActiveRecord::Migration
+class MigrateStep01 < ActiveRecordMigration
   def change
     reversible do |dir|
       dir.up do
@@ -77,7 +77,7 @@ class MigrateStep01 < ActiveRecord::Migration
   end
 end
 
-class MigrateStep02 < ActiveRecord::Migration
+class MigrateStep02 < ActiveRecordMigration
   def change
     reversible do |dir|
       dir.up do

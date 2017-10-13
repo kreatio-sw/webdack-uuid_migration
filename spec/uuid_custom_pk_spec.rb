@@ -1,6 +1,6 @@
 require_relative 'spec_helper'
 
-class MigrationBase < ActiveRecord::Migration
+class MigrationBase < ActiveRecordMigration
   def change
     create_table :states, primary_key: :stateid do |t|
       t.string :name
@@ -10,7 +10,7 @@ class MigrationBase < ActiveRecord::Migration
   end
 end
 
-class Migration01 < ActiveRecord::Migration
+class Migration01 < ActiveRecordMigration
   def change
     reversible do |dir|
       dir.up do
@@ -24,7 +24,7 @@ class Migration01 < ActiveRecord::Migration
   end
 end
 
-class Migration02 < ActiveRecord::Migration
+class Migration02 < ActiveRecordMigration
   def change
     reversible do |dir|
       dir.up do
@@ -38,7 +38,7 @@ class Migration02 < ActiveRecord::Migration
   end
 end
 
-class Migration03 < ActiveRecord::Migration
+class Migration03 < ActiveRecordMigration
   def change
     reversible do |dir|
       dir.up do

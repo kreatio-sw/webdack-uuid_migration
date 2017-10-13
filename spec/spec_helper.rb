@@ -12,3 +12,9 @@ RSpec.configure do |c|
     c.filter_run_excluding rails_4_2_or_newer: true
   end
 end
+
+ActiveRecordMigration = if ActiveRecord.version >= Gem::Version.new('5.0.0')
+                          ActiveRecord::Migration[5.0]
+                        else
+                          ActiveRecord::Migration
+                        end
