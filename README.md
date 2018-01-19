@@ -33,7 +33,7 @@ this gem can safely be removed from your applications Gemfile.
 ## Usage
 
 - Put `require 'webdack/uuid_migration/helpers'` in your migration file.
-- Enable `'uuid-ossp'` directly in Postgres database or by adding `enable_extension 'uuid-ossp'` to your migration.
+- Enable `'pgcrypto'` directly in Postgres database or by adding `enable_extension 'pgcrypto'` to your migration.
 - Use methods from {Webdack::UUIDMigration::Helpers} as appropriate.
 
 Example:
@@ -47,7 +47,7 @@ Example:
           dir.up do
             # Good idea to do the following, needs superuser rights in the database
             # Alternatively the extension needs to be manually enabled in the RDBMS
-            enable_extension 'uuid-ossp'
+            enable_extension 'pgcrypto'
 
             primary_key_to_uuid :students
 
@@ -83,7 +83,7 @@ class MigrateWithFk < ActiveRecord::Migration
   def change
     reversible do |dir|
       dir.up do
-        enable_extension 'uuid-ossp'
+        enable_extension 'pgcrypto'
 
         primary_key_and_all_references_to_uuid :cities
       end
