@@ -140,11 +140,9 @@ Example:
 Works only with Rails 4 & Rails 5. It uses Rails4's out-of-the-box UUID support for PostgreSQL. Works with following 
 Ruby versions:
 
-- 2.0.0
-- 2.1.10
-- 2.2.8
-- 2.3.5
-- 2.4.2
+  - 2.3.6
+  - 2.4.3
+  - 2.5.0
  
 Tested with Rails 5.0.x and 5.1.x. Reported working with 5.2.0 alpha.
 
