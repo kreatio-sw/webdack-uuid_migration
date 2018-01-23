@@ -4,7 +4,7 @@ class BasicMigration < ActiveRecordMigration
   def change
     reversible do |dir|
       dir.up do
-        enable_extension 'uuid-ossp'
+        enable_extension 'pgcrypto'
 
         primary_key_to_uuid :students
         columns_to_uuid :students, :city_id, :institution_id
@@ -21,7 +21,7 @@ class MigrateAllOneGo < ActiveRecordMigration
   def change
     reversible do |dir|
       dir.up do
-        enable_extension 'uuid-ossp'
+        enable_extension 'pgcrypto'
 
         primary_key_to_uuid :cities
         primary_key_to_uuid :colleges
@@ -42,7 +42,7 @@ class MigrateWithFk < ActiveRecordMigration
   def change
     reversible do |dir|
       dir.up do
-        enable_extension 'uuid-ossp'
+        enable_extension 'pgcrypto'
 
         primary_key_and_all_references_to_uuid :cities
       end
@@ -58,7 +58,7 @@ class MigrateStep01 < ActiveRecordMigration
   def change
     reversible do |dir|
       dir.up do
-        enable_extension 'uuid-ossp'
+        enable_extension 'pgcrypto'
 
         primary_key_to_uuid :cities
         primary_key_to_uuid :colleges
@@ -157,7 +157,7 @@ describe Webdack::UUIDMigration::Helpers do
       end
 
       # Verify that primary key has correct default
-      expect(columns.find{|c| c.name == 'id'}.default_function).to eq 'uuid_generate_v4()'
+      expect(columns.find{|c| c.name == 'id'}.default_function).to eq 'gen_random_uuid()'
     end
   end
 

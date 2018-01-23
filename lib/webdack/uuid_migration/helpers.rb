@@ -7,16 +7,16 @@ module Webdack
 
 
       # Converts primary key from Serial Integer to UUID, migrates all data by left padding with 0's
-      #   sets uuid_generate_v4() as default for the column
+      #   sets gen_random_uuid() as default for the column
       #
       # @param table [Symbol]
       # @param options [hash]
       # @option options [Symbol] :primary_key if not supplied queries the schema (should work most of the times)
-      # @option options [String] :default mechanism to generate UUID for new records, default uuid_generate_v4(),
+      # @option options [String] :default mechanism to generate UUID for new records, default gen_random_uuid(),
       #           which is Rails 4.0.0 default as well
       # @return [none]
       def primary_key_to_uuid(table, options={})
-        default= options[:default] || 'uuid_generate_v4()'
+        default= options[:default] || 'gen_random_uuid()'
 
         column= connection.primary_key(table)
 

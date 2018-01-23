@@ -6,7 +6,7 @@ class MigrationBase < ActiveRecordMigration
       t.string :name
     end
 
-    enable_extension 'uuid-ossp'
+    enable_extension 'pgcrypto'
   end
 end
 
@@ -42,7 +42,7 @@ class Migration03 < ActiveRecordMigration
   def change
     reversible do |dir|
       dir.up do
-        primary_key_to_uuid :states, default: 'uuid_generate_v1()'
+        primary_key_to_uuid :states, default: 'gen_random_uuid()'
       end
 
       dir.down do
@@ -111,7 +111,7 @@ describe Webdack::UUIDMigration::Helpers do
     }
 
     default_function = State.connection.columns(:states).find { |c| c.name == 'stateid' }.default_function
-    expect(default_function).to eq 'uuid_generate_v1()'
+    expect(default_function).to eq 'gen_random_uuid()'
   end
 
 end
