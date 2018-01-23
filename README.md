@@ -159,6 +159,7 @@ To run the test suite:
 - Users of the Gem
 - [Felix Bünemann](https://github.com/felixbuenemann) for checking compatibility with Rails 4.1
 - [Nick Schwaderer](https://github.com/Schwad) Rials 5.2.x compatibility
+- [Kelsey Hannan](https://github.com/KelseyDH) Upgrading to `pgcrypto`
 
 ## Contributing
 
