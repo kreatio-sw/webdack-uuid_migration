@@ -16,15 +16,21 @@ http://www.rubydoc.info/gems/webdack-uuid_migration
 
 Add this line to your application's Gemfile:
 
+```ruby
     gem 'webdack-uuid_migration'
+```
 
 And then execute:
 
+```bash
     $ bundle
+```
 
 Or install it yourself as:
 
+```bash
     $ gem install webdack-uuid_migration
+```
     
 This gem is needed only during database migrations. 
 Once the database has been migrated in all environments, 
@@ -38,6 +44,7 @@ this gem can safely be removed from your applications Gemfile.
 
 Example:
 
+```ruby
     # You must explicitly require it in your migration file
     require 'webdack/uuid_migration/helpers'
 
@@ -62,6 +69,7 @@ Example:
         end
       end
     end
+```
 
 Integer values are converted to UUID by padding 0's to the left. This makes it possible to
 retrieve old id in future.
@@ -78,7 +86,7 @@ This function will only work with Rails 4.2 or newer.
 To update a primary key and all columns referencing it please use
 {Webdack::UUIDMigration::Helpers#primary_key_and_all_references_to_uuid}. For example:
 
-```
+```ruby
 class MigrateWithFk < ActiveRecord::Migration
   def change
     reversible do |dir|
@@ -118,6 +126,7 @@ following steps:
 
 Example:
 
+```ruby
     # Student -- belongs_to :institution, :polymorphic => true
     # An institution is either a School or a College
     # College is migrated to use UUID as primary key
@@ -133,7 +142,7 @@ Example:
         columns_to_uuid :students, :institution_id
 
     # See the rspec test case in spec folder for full example
-
+```
 
 ## Compatibility
 
