@@ -17,12 +17,13 @@ module Webdack
       # @return [none]
       def primary_key_to_uuid(table, options={})
         default= options[:default] || 'gen_random_uuid()'
+        random = options[:random] || false
 
         column= connection.primary_key(table)
 
         execute %Q{ALTER TABLE #{table}
                  ALTER COLUMN #{column} DROP DEFAULT,
-                 ALTER COLUMN #{column} SET DATA TYPE UUID USING (#{to_uuid_pg(column)}),
+                 ALTER COLUMN #{column} SET DATA TYPE UUID USING (#{to_uuid_pg(column, random)}),
                  ALTER COLUMN #{column} SET DEFAULT #{default}}
 
         execute %Q{DROP SEQUENCE IF EXISTS #{table}_#{column}_seq} rescue nil
@@ -34,9 +35,11 @@ module Webdack
       # @param column [Symbol]
       #
       # @return [none]
-      def column_to_uuid(table, column)
+      def column_to_uuid(table, column, options={})
+        random = options[:random] || false
+
         execute %Q{ALTER TABLE #{table}
-                 ALTER COLUMN #{column} SET DATA TYPE UUID USING (#{to_uuid_pg(column)})}
+                 ALTER COLUMN #{column} SET DATA TYPE UUID USING (#{to_uuid_pg(column, random)})}
       end
 
       # Converts columns to UUID, migrates all data by left padding with 0's
@@ -46,8 +49,9 @@ module Webdack
       #
       # @return [none]
       def columns_to_uuid(table, *columns)
+        options = columns[-1].is_a?(Hash) ? columns.pop : {}
         columns.each do |column|
-          column_to_uuid(table, column)
+          column_to_uuid(table, column, options)
         end
       end
 
@@ -104,13 +108,17 @@ module Webdack
       end
 
       private
-      # Prepare a fragment that can be used in SQL statements that converts teh data value
+      # Prepare a fragment that can be used in SQL statements that converts the data value
       # from integer, string, or UUID to valid UUID string as per Postgres guidelines
       #
       # @param column [Symbol]
       # @return [String]
-      def to_uuid_pg(column)
-        "uuid(lpad(replace(text(#{column}),'-',''), 32, '0'))"
+      def to_uuid_pg(column, random = false)
+        if random
+          "gen_random_uuid()"
+        else
+          "uuid(lpad(replace(text(#{column}),'-',''), 32, '0'))"
+        end
       end
     end
   end

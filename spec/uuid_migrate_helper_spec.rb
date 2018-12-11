@@ -17,6 +17,23 @@ class BasicMigration < ActiveRecordMigration
   end
 end
 
+class BasicMigrationRandomUuid < ActiveRecordMigration
+  def change
+    reversible do |dir|
+      dir.up do
+        enable_extension 'pgcrypto'
+
+        primary_key_to_uuid :students, random: true
+        columns_to_uuid :students, :city_id, :institution_id, random: true
+      end
+
+      dir.down do
+        raise ActiveRecord::IrreversibleMigration
+      end
+    end
+  end
+end
+
 class MigrateAllOneGo < ActiveRecordMigration
   def change
     reversible do |dir|
@@ -146,11 +163,56 @@ describe Webdack::UUIDMigration::Helpers do
         expect(id).to match(/^0{8}-0{4}-0{4}-0{4}-\d{12}$/)
       end
 
-      # Verify that it is possible to retirve original id values
+      # Verify that it is possible to retrieve original id values
       ids= [student.id, student.city_id, student.institution_id].map{|i| i.gsub('-','').to_i}
       expect(ids).to eq(original_ids)
 
-      # Verify that schema reprts the migrated columns to be uuid type
+      # Verify that schema reports the migrated columns to be uuid type
+      columns= Student.connection.columns(:students)
+      [:id, :city_id, :institution_id].each do |column|
+        expect(columns.find{|c| c.name == column.to_s}.type).to eq :uuid
+      end
+
+      # Verify that primary key has correct default
+      expect(columns.find{|c| c.name == 'id'}.default_function).to eq 'gen_random_uuid()'
+    end
+  end
+
+  describe 'Basic Migration with random UUID test' do
+    it 'should migrate keys correctly' do
+      # Select a random student
+      student = Student.all.to_a.sample
+
+      # Store these values to check against later
+      original_name= student.name
+      original_ids= [student.id, student.city_id, student.institution_id].map{|i| i.to_i}
+
+      # Migrate and verify that all indexes and primary keys are intact
+      expect {
+        BasicMigrationRandomUuid.migrate(:up)
+        reset_columns_data
+      }.to_not change {
+        indexes= Student.connection.indexes(:students).sort_by { |i| i.name }.map do |i|
+          [i.table, i.name, i.unique, i.columns, i.lengths, i.orders, i.where]
+        end
+
+        [indexes, Student.connection.primary_key(:students)]
+      }
+
+      # Verify that our data is still there
+      student= Student.where(name: original_name).first
+
+      # Verify that data in id columns have been migrated to UUID by verifying the format
+      [student.id, student.city_id, student.institution_id].each do |id|
+        # Verify that the ID was *not* generated based off of the existing ID
+        expect(id).to_not match(/^0{8}-0{4}-0{4}-0{4}-\d{12}$/)
+
+        # Verify that the ID still matches the format for a random UUID
+        random_uuid_regex = /\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b/
+        expect(id).to match(random_uuid_regex)
+      end
+
+      # Verify that schema reports the migrated columns to be uuid type
       columns= Student.connection.columns(:students)
       [:id, :city_id, :institution_id].each do |column|
         expect(columns.find{|c| c.name == column.to_s}.type).to eq :uuid
