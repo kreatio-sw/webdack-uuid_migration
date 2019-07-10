@@ -2,4 +2,7 @@ source "https://rubygems.org"
 
 gem "activerecord", "~>4.2.0"
 
+# This version of ActiveRecrod does not support higher
+gem "pg", '< 1.0'
+
 gemspec :path=>"../"
