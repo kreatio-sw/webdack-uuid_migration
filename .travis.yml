@@ -9,6 +9,11 @@ gemfile:
   - gemfiles/rails51.gemfile
   - gemfiles/rails42.gemfile
 
+matrix:
+  exclude:
+    - rvm: 2.4.9
+      gemfile: gemfiles/rails60.gemfile
+
 script: bundle exec rspec spec
 
 addons:
