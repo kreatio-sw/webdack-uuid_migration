@@ -5,13 +5,14 @@ module Webdack
         to_primary_key = primary_key(to_table_name)
 
 
-        fk_info = select_all <<-SQL.strip_heredoc
-        SELECT t2.oid::regclass::text AS to_table, a2.attname AS primary_key, t1.relname as from_table, a1.attname AS column, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete            FROM pg_constraint c
-        JOIN pg_class t1 ON c.conrelid = t1.oid
-        JOIN pg_class t2 ON c.confrelid = t2.oid
-        JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
-        JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
-        JOIN pg_namespace t3 ON c.connamespace = t3.oid
+        fk_info = select_all <<-SQL
+        SELECT t2.oid::regclass::text AS to_table, a2.attname AS primary_key, t1.relname as from_table, a1.attname AS column, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
+            FROM pg_constraint c
+              JOIN pg_class t1 ON c.conrelid = t1.oid
+              JOIN pg_class t2 ON c.confrelid = t2.oid
+              JOIN pg_attribute a1 ON a1.attnum = c.conkey[1] AND a1.attrelid = t1.oid
+              JOIN pg_attribute a2 ON a2.attnum = c.confkey[1] AND a2.attrelid = t2.oid
+              JOIN pg_namespace t3 ON c.connamespace = t3.oid
         WHERE c.contype = 'f'
           AND t2.oid::regclass::text = #{quote(to_table_name)}
           AND a2.attname = #{quote(to_primary_key)}
