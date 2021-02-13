@@ -56,7 +56,7 @@ module Webdack
           foreign_key_spec = fk_key_spec.dup
           from_table = foreign_key_spec.delete(:from_table)
           to_table = foreign_key_spec.delete(:to_table)
-          add_foreign_key from_table, to_table, foreign_key_spec
+          add_foreign_key from_table, to_table, **foreign_key_spec
         end
       end
     end

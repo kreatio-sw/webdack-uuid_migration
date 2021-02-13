@@ -1,18 +1,22 @@
 rvm:
-  - 2.6.5
-  - 2.5.7
-  - 2.4.9
+  - 3.0.0
+  - 2.7.2
+  - 2.5.8
 
 gemfile:
+  - gemfiles/rails61.gemfile
   - gemfiles/rails60.gemfile
   - gemfiles/rails52.gemfile
-  - gemfiles/rails51.gemfile
   - gemfiles/rails42.gemfile
 
 matrix:
   exclude:
-    - rvm: 2.4.9
-      gemfile: gemfiles/rails60.gemfile
+    - rvm: 3.0.0
+      gemfile: gemfiles/rails52.gemfile
+    - rvm: 3.0.0
+      gemfile: gemfiles/rails42.gemfile
+    - rvm: 2.7.2
+      gemfile: gemfiles/rails42.gemfile
 
 script: bundle exec rspec spec
 
