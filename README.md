@@ -10,16 +10,16 @@ However, there is no reliable tutorial to help convert an in-production Rails ap
 from Integer ids to UUIDs.
 
 This gem has helper methods to convert Integer columns to UUIDs during migrations.
-It supports migrating primary key columns, relations, and polymorphic relations as well.
+It supports migrating primary key columns, relations, and polymorphic relations.
 
-It is designed to be very fast and is suitable for inplace migration of schema and data.
+It is designed to be fast and is suitable for in-place migration of schema and data.
 It has been used in production since 2014.
 
 This only supports PostgreSQL.
 
 ## Documentation
 
-http://www.rubydoc.info/gems/webdack-uuid_migration (Link is dead).
+http://www.rubydoc.info/gems/webdack-uuid_migration (The link may occasionally not work).
 
 ## Installation
 
@@ -157,6 +157,8 @@ Example:
 
 Works with Rails 4.2+, 5 & 6. It uses Rails 4's out-of-the-box UUID support for PostgreSQL.
 
+Update to latest version (>=1.4.0) for using it with Ruby 3.
+
 See https://travis-ci.org/kreatio-sw/webdack-uuid_migration for current build matrix.
 
 To run the test suite:
@@ -171,6 +173,7 @@ To run the test suite:
 - [Felix Bünemann](https://github.com/felixbuenemann) for checking compatibility with Rails 4.1
 - [Nick Schwaderer](https://github.com/Schwad) Rails 5.2.x compatibility
 - [Kelsey Hannan](https://github.com/KelseyDH) Upgrading to `pgcrypto`
+- [Sébastien Dubois](https://github.com/sedubois) Ruby 3.0 compatibility 
 
 ## Contributing
 

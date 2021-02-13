@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Deepak Kumar"]
   spec.email         = ["deepak@kreatio.com"]
   spec.summary       = %q{Useful helpers to migrate Integer id columns to UUID in PostgreSql.}
-  spec.description   = %q{Useful helpers to migrate Integer id columns to UUID in PostgreSql. Special support for primary keys.}
+  spec.description   = %q{Useful helpers to consistently migrate Integer id columns to UUID in PostgreSql. Special support for primary keys and references.}
   spec.homepage      = "https://github.com/kreatio-sw/webdack-uuid_migration"
   spec.license       = 'MIT'
 
