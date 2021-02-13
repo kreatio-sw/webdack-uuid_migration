@@ -26,6 +26,4 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'gem-release'
 
   spec.add_dependency 'activerecord', '>= 4.0'
-
-  spec.has_rdoc= 'yard'
 end
