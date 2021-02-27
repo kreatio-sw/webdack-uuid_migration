@@ -110,7 +110,7 @@ module Webdack
       # @param column [Symbol]
       # @return [String]
       def to_uuid_pg(column)
-        "uuid(lpad(replace(text(#{column}),'-',''), 32, '0'))"
+        "gen_random_uuid"
       end
     end
   end
