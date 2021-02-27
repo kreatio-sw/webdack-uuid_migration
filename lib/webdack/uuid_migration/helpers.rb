@@ -110,7 +110,7 @@ module Webdack
       # @param column [Symbol]
       # @return [String]
       def to_uuid_pg(column)
-        "uuid_in(md5(column)::cstring)"
+        "uuid_in(md5(column::text)::cstring)"
       end
     end
   end
