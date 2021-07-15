@@ -143,7 +143,7 @@ describe Webdack::UUIDMigration::Helpers do
 
       # Verify that data in id columns have been migrated to UUID by verifying the format
       [student.id, student.city_id, student.institution_id].each do |id|
-        expect(id).to match(/^0{8}-0{4}-0{4}-0{4}-\d{12}$/)
+        expect(id).to match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/)
       end
 
       # Verify that it is possible to retirve original id values
