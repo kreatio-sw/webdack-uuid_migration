@@ -49,6 +49,7 @@ this gem can safely be removed from your applications Gemfile.
 
 - Put `require 'webdack/uuid_migration/helpers'` in your migration file.
 - Enable `'pgcrypto'` directly in Postgres database or by adding `enable_extension 'pgcrypto'` to your migration.
+  If you want to generate random UUIDs, enable `uuid-ossp` instead.
 - Use methods from {Webdack::UUIDMigration::Helpers} as appropriate.
 
 Example:
@@ -80,8 +81,9 @@ Example:
     end
 ```
 
-Integer values are converted to UUID by padding 0's to the left. This makes it possible to
-retrieve old id in future.
+By default, integer values are converted to UUID by padding 0's to the left. 
+This makes it possible to retrieve old id in future. See **Generating random UUIDs** below to
+convert integer into random UUIDs using a seed.
 
 See {Webdack::UUIDMigration::Helpers} for more details. {Webdack::UUIDMigration::Helpers} is mixed
 into {ActiveRecord::Migration}, so that all methods can directly be used within migrations.
@@ -152,6 +154,31 @@ Example:
 
     # See the rspec test case in spec folder for full example
 ```
+
+## Generating random UUIDs
+
+You can provide a `seed` parameter with a valid UUID, which will be used to convert integers into random 
+UUIDs using [uuid_generate_v5](https://www.postgresql.org/docs/current/uuid-ossp.html). You will only be 
+able to recover the old IDs in the future if you use the seed you used during the migration to generate a 
+rainbow table.
+
+Examples:
+
+```ruby
+seed = SecureRandom.uuid
+
+primary_key_to_uuid :colleges, seed: seed
+columns_to_uuid :students, :institution_id, seed: seed
+polymorphic_column_data_for_uuid :students, :institution, 'College', seed: seed
+primary_key_and_all_references_to_uuid :cities: seed: seed
+
+```
+
+**Note:** Given a set of IDs (which are used, for example, as primary key in one table and foreign
+key in multiple tables), you will need to use the same seed in all method calls. Otherwise, the 
+conversion will happen differently in each one of the tables, and the relations will be effectively 
+lost. In general, it is adviced to use a different seed per ID set (primary key) to maintain data 
+consistency and guarantee uniqueness across tables.
 
 ## Compatibility
 

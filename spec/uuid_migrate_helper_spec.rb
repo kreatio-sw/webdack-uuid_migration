@@ -167,7 +167,7 @@ describe Webdack::UUIDMigration::Helpers do
           end
     
           unless seed_value
-          # Verify that it is possible to retirve original id values
+            # Verify that it is possible to retirve original id values (only without seed!)
             ids= [student.id, student.city_id, student.institution_id].map{|i| i.gsub('-','').to_i}
             expect(ids).to eq(original_ids)
           end
