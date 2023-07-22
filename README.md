@@ -49,7 +49,7 @@ this gem can safely be removed from your applications Gemfile.
 
 - Put `require 'webdack/uuid_migration/helpers'` in your migration file.
 - Enable `'pgcrypto'` directly in Postgres database or by adding `enable_extension 'pgcrypto'` to your migration.
-  If you want to generate random UUIDs, enable `uuid-ossp` instead.
+  If you want to generate random UUIDs, enable `uuid-ossp` as well.
 - Use methods from {Webdack::UUIDMigration::Helpers} as appropriate.
 
 Example:
