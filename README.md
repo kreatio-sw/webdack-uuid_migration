@@ -201,6 +201,7 @@ To run the test suite:
 - [Nick Schwaderer](https://github.com/Schwad) Rails 5.2.x compatibility
 - [Kelsey Hannan](https://github.com/KelseyDH) Upgrading to `pgcrypto`
 - [Sébastien Dubois](https://github.com/sedubois) Ruby 3.0 compatibility 
+- [Manuel Bustillo Alonso](https://github.com/bustikiller) Random UUID support
 
 ## Contributing
 
