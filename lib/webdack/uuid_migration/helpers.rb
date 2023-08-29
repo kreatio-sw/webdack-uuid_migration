@@ -5,7 +5,6 @@ module Webdack
     module Helpers
       include SchemaHelpers
 
-
       # Converts primary key from Serial Integer to UUID, migrates all data by left padding with 0's
       #   sets gen_random_uuid() as default for the column
       #
@@ -14,15 +13,17 @@ module Webdack
       # @option options [Symbol] :primary_key if not supplied queries the schema (should work most of the times)
       # @option options [String] :default mechanism to generate UUID for new records, default gen_random_uuid(),
       #           which is Rails 4.0.0 default as well
+      # @option options [String] :seed used as namespace to generate UUIDv5 from the existing ID
       # @return [none]
-      def primary_key_to_uuid(table, options={})
-        default= options[:default] || 'gen_random_uuid()'
+      def primary_key_to_uuid(table, options = {})
+        default = options[:default] || 'gen_random_uuid()'
+        seed = options[:seed]
 
-        column= connection.primary_key(table)
+        column = connection.primary_key(table)
 
         execute %Q{ALTER TABLE #{table}
                  ALTER COLUMN #{column} DROP DEFAULT,
-                 ALTER COLUMN #{column} SET DATA TYPE UUID USING (#{to_uuid_pg(column)}),
+                 ALTER COLUMN #{column} SET DATA TYPE UUID USING (#{to_uuid_pg(column, seed)}),
                  ALTER COLUMN #{column} SET DEFAULT #{default}}
 
         execute %Q{DROP SEQUENCE IF EXISTS #{table}_#{column}_seq} rescue nil
@@ -32,22 +33,24 @@ module Webdack
       #
       # @param table [Symbol]
       # @param column [Symbol]
+      # @param seed [String]
       #
       # @return [none]
-      def column_to_uuid(table, column)
+      def column_to_uuid(table, column, seed: nil)
         execute %Q{ALTER TABLE #{table}
-                 ALTER COLUMN #{column} SET DATA TYPE UUID USING (#{to_uuid_pg(column)})}
+                 ALTER COLUMN #{column} SET DATA TYPE UUID USING (#{to_uuid_pg(column, seed)})}
       end
 
       # Converts columns to UUID, migrates all data by left padding with 0's
       #
       # @param table [Symbol]
       # @param columns
+      # @param seed [String]
       #
       # @return [none]
-      def columns_to_uuid(table, *columns)
+      def columns_to_uuid(table, *columns, seed: nil)
         columns.each do |column|
-          column_to_uuid(table, column)
+          column_to_uuid(table, column, seed: seed)
         end
       end
 
@@ -68,10 +71,12 @@ module Webdack
       # @param table[Symbol]
       # @param column [Symbol] it will change data in corresponding <column>_id
       # @param entities [String] data referring these entities will be converted
-      def polymorphic_column_data_for_uuid(table, column, *entities)
-        list_of_entities= entities.map{|e| "'#{e}'"}.join(', ')
+      # @param seed [String]
+
+      def polymorphic_column_data_for_uuid(table, column, *entities, seed: nil)
+        list_of_entities = entities.map { |e| "'#{e}'" }.join(', ')
         execute %Q{
-                  UPDATE #{table} SET #{column}_id= #{to_uuid_pg("#{column}_id")}
+                  UPDATE #{table} SET #{column}_id= #{to_uuid_pg("#{column}_id", seed)}
                     WHERE #{column}_type in (#{list_of_entities})
                 }
       end
@@ -88,29 +93,38 @@ module Webdack
       # - Restore all foreign keys
       #
       # @param table[Symbol]
+      # @param seed [String]
+
       # @note Works only with Rails 4.2 or newer
-      def primary_key_and_all_references_to_uuid(table)
+      def primary_key_and_all_references_to_uuid(table, seed: nil)
         fk_specs = foreign_keys_into(table)
 
         drop_foreign_keys(fk_specs)
 
-        primary_key_to_uuid(table)
+        primary_key_to_uuid(table, seed: seed)
 
         fk_specs.each do |fk_spec|
-          columns_to_uuid fk_spec[:from_table], fk_spec[:column]
+          columns_to_uuid fk_spec[:from_table], fk_spec[:column], seed: seed
         end
 
         create_foreign_keys(fk_specs.deep_dup)
       end
 
       private
+
       # Prepare a fragment that can be used in SQL statements that converts teh data value
       # from integer, string, or UUID to valid UUID string as per Postgres guidelines
       #
       # @param column [Symbol]
+      # @param seed [String]
+
       # @return [String]
-      def to_uuid_pg(column)
-        "uuid(lpad(replace(text(#{column}),'-',''), 32, '0'))"
+      def to_uuid_pg(column, seed)
+        if seed
+          "uuid_generate_v5('#{seed}'::uuid, #{column}::text)"
+        else
+          "uuid(lpad(replace(text(#{column}),'-',''), 32, '0'))"
+        end
       end
     end
   end
