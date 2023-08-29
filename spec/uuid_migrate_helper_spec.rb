@@ -1,5 +1,4 @@
 require_relative 'spec_helper'
-require 'pry'
 
 class ActiveRecordMigration
   def self.seed_with(seed)
@@ -165,7 +164,7 @@ describe Webdack::UUIDMigration::Helpers do
           [student.id, student.city_id, student.institution_id].each do |id|
             expect(id).to match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/)
           end
-    
+
           unless seed_value
             # Verify that it is possible to retirve original id values (only without seed!)
             ids= [student.id, student.city_id, student.institution_id].map{|i| i.gsub('-','').to_i}
@@ -229,7 +228,7 @@ describe Webdack::UUIDMigration::Helpers do
         expect {
           MigrateStep02.seed_with(seed_value).migrate(:up)
           reset_columns_data
-          
+
         }.to_not change {
           key_relationships
         }
