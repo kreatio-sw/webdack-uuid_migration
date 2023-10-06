@@ -2,8 +2,11 @@
 
 PG_SPEC = {
     :adapter  => 'postgresql',
+    :host => '127.0.0.1',
+    :port => 5432,
     :database => 'webdack_uuid_migration_helper_test',
     :username => 'postgres',
+    :password => 'password',
     :encoding => 'utf8'
 }
 

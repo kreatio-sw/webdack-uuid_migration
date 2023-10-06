@@ -1,0 +1,59 @@
+name: GitHub CI Tests
+
+on: [ push, pull_request ]
+
+jobs:
+  test:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - ruby-version: 2.5
+            postgres: 9.6
+            gemfile: gemfiles/rails42.gemfile
+          - ruby-version: 2.6
+            postgres: 10
+            gemfile: gemfiles/rails52.gemfile
+          - ruby-version: 2.7
+            postgres: 12
+            gemfile: gemfiles/rails61.gemfile
+          - ruby-version: 3.0
+            postgres: 14
+            gemfile: gemfiles/rails70.gemfile
+          - ruby-version: 3.1
+            postgres: 16
+            gemfile: gemfiles/rails71.gemfile
+
+    # service containers to run with `postgres-job`
+    services:
+      # label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: postgres:${{ matrix.postgres }}
+        # service environment variables
+        # `POSTGRES_HOST` is `postgres`
+        env:
+          # optional (defaults to `postgres`)
+          # POSTGRES_DB: postgres_db
+          # required
+          POSTGRES_PASSWORD: password
+          # optional (defaults to `5432`)
+          # POSTGRES_PORT: 5432
+          # optional (defaults to `postgres`)
+          # POSTGRES_USER: postgres_user
+        ports:
+          # maps tcp port 5432 on service container to the host
+          - 5432:5432
+
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+      - name: Install dependencies
+        run: bundle install --gemfile ${{ matrix.gemfile }}
+      - name: Run tests
+        run: bundle exec rspec spec
