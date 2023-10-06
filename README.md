@@ -177,12 +177,17 @@ primary_key_and_all_references_to_uuid :cities: seed: seed
 **Note:** Given a set of IDs (which are used, for example, as primary key in one table and foreign
 key in multiple tables), you will need to use the same seed in all method calls. Otherwise, the 
 conversion will happen differently in each one of the tables, and the relations will be effectively 
-lost. In general, it is adviced to use a different seed per ID set (primary key) to maintain data 
+lost. In general, it is advised to use a different seed per ID set (primary key) to maintain data 
 consistency and guarantee uniqueness across tables.
 
 ## Compatibility
 
-Works with Rails 4.2+, 5 & 6. It uses Rails 4's out-of-the-box UUID support for PostgreSQL.
+As on October 06, 2023, actively tested with the following:
+- Rails 4.2 to 7.1
+- Ruby 2.5 to 3.1
+- Postgres 9.6 to 16
+
+Please see [workflows/ubuntu.yml](.github/workflows/ubuntu.yml) for the current test matrix.
 
 Update to latest version (>=1.4.0) for using it with Ruby 3.
 
