@@ -1,6 +1,6 @@
 # Webdack::UuidMigration
 
-[![Build Status](https://travis-ci.org/kreatio-sw/webdack-uuid_migration.svg?branch=master)](https://travis-ci.org/kreatio-sw/webdack-uuid_migration)
+[![GitHub CI Tests](https://github.com/kreatio-sw/webdack-uuid_migration/actions/workflows/ubuntu.yml/badge.svg)](https://github.com/kreatio-sw/webdack-uuid_migration/actions/workflows/ubuntu.yml)
 
 **This project is actively maintained. Please report issues and/or create
 pull requests if you face any issues.**
